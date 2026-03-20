@@ -1,0 +1,12 @@
+kubectl create deployment backend1 --image=hashicorp/http-echo
+kubectl create deployment backend2 --image=hashicorp/http-echo
+
+kubectl expose deployment backend1 --type=ClusterIP --port=80 --target-port=5678
+kubectl expose deployment backend2 --type=ClusterIP --port=80 --target-port=5678
+
+kubectl create configmap nginx-config --from-file=nginx.conf
+kubectl apply -f nginx-deploy.yaml
+
+kubectl expose deployment nginx --type=NodePort --port=80
+
+kubectl port-forward deployment/nginx 8080:80
